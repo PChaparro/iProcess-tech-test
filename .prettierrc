@@ -12,12 +12,12 @@
   "useTabs": false,
   "tabWidth": 2,
   "importOrder": [
+    "^[./]",
     "^@/context/(.*)$",
-    "^@/screens/(.*)$",
+    "^@/pages/(.*)$",
     "^@/hooks/(.*)$",
     "^@/data/(.*)$",
-    "^@/components/(.*)$",
-    "^[./]"
+    "^@/components/(.*)$"
   ],
   "importOrderSeparation": true,
   "plugins": [
