@@ -12,6 +12,8 @@ In the `src` folder you will find the following structure:
 
 - `config`: Configuration files for the project, like constants.
 
+- `hooks`: Custom hooks that can be used **in multiple places** in the project.
+
 - `lib`: Utility functions that are used **in multiple places** in the project.
 
 - `pages`: The pages of the project. Each subfolder represents a page. Inside each subfolder you will find a `components`, `hooks` and `context` folders with the components, hooks and context providers used **only** in that page. This organization helps to keep high **cohesion** among all the elements that are part of a page to make it easier to maintain and understand.
