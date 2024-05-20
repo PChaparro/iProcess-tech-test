@@ -27,7 +27,8 @@ export default function CreateLoanDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button>
-          <PlusIcon className='mr-2' /> Nuevo préstamo
+          Nuevo préstamo
+          <PlusIcon className='ml-2' />
         </Button>
       </DialogTrigger>
       <DialogContent className='max-w-md'>

@@ -77,6 +77,9 @@ export const CreateLoanForm = ({
       payments: [defaultPayment],
     };
 
+    /** TODO: In a real scenario, the callback should make a request to an API to create the loan
+     * and we should handle any error that may occur to show a success or error toast.
+     */
     addLoanCallback(loan);
     showSuccessToast('Préstamo creado correctamente');
     closeDialogCallback();
