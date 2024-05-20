@@ -1,11 +1,12 @@
 import { CONSTANTS } from '@/config/constants';
 import { EditIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-import CreateLoanDialog from './components/CreateLoanDialog';
+import CreateLoanDialog from '@/pages/root/components/CreateLoanDialog';
 
 import useLoans from '@/hooks/useLoans';
 
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -22,7 +23,7 @@ export default function Loans() {
   return (
     <main>
       <header className='mb-4 flex flex-wrap justify-between gap-4 border-b pb-4'>
-        <h1 className='text-primary text-3xl font-bold'>
+        <h1 className='text-3xl font-bold text-primary'>
           Listado de préstamos
         </h1>
         <CreateLoanDialog addLoanCallback={addLoan} />
@@ -63,9 +64,12 @@ export default function Loans() {
                   })}
                 </TableCell>
                 <TableCell>
-                  <Button>
+                  <Link
+                    to={`/loan/${loan.id}`}
+                    className={buttonVariants({ variant: 'default' })}
+                  >
                     <EditIcon className='mr-2' /> Editar
-                  </Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))

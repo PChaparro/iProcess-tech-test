@@ -14,3 +14,11 @@ export function getRandomId(length = 4): string {
 export function getRandomLoanId(): string {
   return `LOAN${getRandomId()}`;
 }
+
+export function getRandomPaymentId(): string {
+  return `PAY${getRandomId()}`;
+}
+
+export function formatDateToYYYYMMDD(date: Date): string {
+  return date.toISOString().split('T')[0];
+}

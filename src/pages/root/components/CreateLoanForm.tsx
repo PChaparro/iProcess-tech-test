@@ -1,5 +1,9 @@
-import { getRandomLoanId } from '@/lib/utils';
-import { Loan } from '@/types/entities';
+import {
+  formatDateToYYYYMMDD,
+  getRandomLoanId,
+  getRandomPaymentId,
+} from '@/lib/utils';
+import { Loan, Payment, PaymentStatus } from '@/types/entities';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -52,15 +56,25 @@ export const CreateLoanForm = ({
   const submitCallback = (values: z.infer<typeof createLoanSchema>) => {
     const { borrower, amount } = values;
 
+    const oneMothFromNow = new Date();
+    oneMothFromNow.setMonth(oneMothFromNow.getMonth() + 1);
+
+    const defaultPayment: Payment = {
+      id: getRandomPaymentId(),
+      title: 'Anticipo',
+      percentage: 100,
+      status: PaymentStatus.PENDING,
+      paymentDate: formatDateToYYYYMMDD(oneMothFromNow),
+    };
+
     const now = new Date();
-    const formattedDate = now.toISOString().split('T')[0];
 
     const loan: Loan = {
       amount,
       borrower,
       id: getRandomLoanId(),
-      creationDate: formattedDate,
-      payments: [],
+      creationDate: formatDateToYYYYMMDD(now),
+      payments: [defaultPayment],
     };
 
     addLoanCallback(loan);
