@@ -11,9 +11,10 @@ export default function useLoans() {
 
   // Effects
   useEffect(() => {
+    // TODO: In a real scenario, a request to an API should be made here to get the loans.
     const loans = getFromLocalStorage<Loan[]>('loans');
     if (loans) setLoans(loans);
-  }, [getFromLocalStorage]);
+  }, []);
 
   // Wrappers
   const addLoan = (loan: Loan) => {
