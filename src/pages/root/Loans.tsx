@@ -23,7 +23,7 @@ export default function Loans() {
   return (
     <main>
       <header className='mb-4 flex flex-wrap justify-between gap-4 border-b pb-4'>
-        <h1 className='text-3xl font-bold text-primary'>
+        <h1 className='text-2xl font-bold text-primary'>
           Listado de préstamos
         </h1>
         <CreateLoanDialog addLoanCallback={addLoan} />
@@ -68,7 +68,8 @@ export default function Loans() {
                     to={`/loan/${loan.id}`}
                     className={buttonVariants({ variant: 'default' })}
                   >
-                    <EditIcon className='mr-2' /> Editar
+                    Editar
+                    <EditIcon className='ml-2' />
                   </Link>
                 </TableCell>
               </TableRow>
