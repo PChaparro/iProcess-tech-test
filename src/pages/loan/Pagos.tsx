@@ -2,7 +2,9 @@ import { CONSTANTS } from '@/config/constants';
 import { PaymentStatus } from '@/types/entities';
 import { ChevronDownIcon, PencilIcon } from 'lucide-react';
 import { useParams } from 'react-router-dom';
+import { Fragment } from 'react/jsx-runtime';
 
+import PaymentContainer from './components/PaymentStepper/PaymentContainer';
 import useLoan from './hooks/useLoan';
 
 import { Button } from '@/components/ui/button';
@@ -25,7 +27,7 @@ export default function Pagos() {
   const remainingAmount = loan.amount - paidAmount;
 
   return (
-    <main>
+    <Fragment>
       <header className='mb-4 flex flex-wrap justify-between gap-4 border-b pb-4'>
         {/* Left part */}
         <button className='inline-flex items-center text-primary'>
@@ -50,6 +52,13 @@ export default function Pagos() {
           </p>
         </div>
       </header>
-    </main>
+      <main>
+        <ul className='flex overflow-x-auto px-24 py-8'>
+          {loan.payments.map((payment, idx) => (
+            <PaymentContainer key={payment.id} index={idx} payment={payment} />
+          ))}
+        </ul>
+      </main>
+    </Fragment>
   );
 }
