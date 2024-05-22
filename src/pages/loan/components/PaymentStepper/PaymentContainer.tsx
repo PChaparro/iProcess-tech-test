@@ -1,5 +1,4 @@
 import { Payment } from '@/types/entities';
-import { useParams } from 'react-router-dom';
 
 import useLoan from '../../hooks/useLoan';
 import PaymentEditMode from './presentations/PaymentEditMode';
@@ -14,8 +13,7 @@ export default function PaymentContainer({
   index,
   payment,
 }: PaymentContainerProps) {
-  const { id } = useParams();
-  const { isEditing } = useLoan({ id: id as string });
+  const { isEditing } = useLoan();
 
   return (
     <li className='group relative flex-[0_0_25%]'>

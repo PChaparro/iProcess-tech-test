@@ -1,7 +1,6 @@
 import { CONSTANTS } from '@/config/constants';
 import { Payment } from '@/types/entities';
 import { PencilIcon } from 'lucide-react';
-import { useParams } from 'react-router-dom';
 import { Fragment } from 'react/jsx-runtime';
 
 import AddPaymentButton from '../../AddPaymentButton';
@@ -17,8 +16,7 @@ export default function PaymentPreviewMode({
   index,
   payment,
 }: PaymentPreviewModeProps) {
-  const { id } = useParams();
-  const { loan } = useLoan({ id: id as string });
+  const { loan } = useLoan();
 
   const isFirstPayment = index === 0;
 

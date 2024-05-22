@@ -1,7 +1,6 @@
 import { CONSTANTS } from '@/config/constants';
 import { PaymentStatus } from '@/types/entities';
 import { ChevronDownIcon, PencilIcon } from 'lucide-react';
-import { useParams } from 'react-router-dom';
 import { Fragment } from 'react/jsx-runtime';
 
 import PaymentContainer from './components/PaymentStepper/PaymentContainer';
@@ -10,8 +9,7 @@ import useLoan from './hooks/useLoan';
 import { Button } from '@/components/ui/button';
 
 export default function Pagos() {
-  const { id } = useParams();
-  const { loan, isEditing, setIsEditing } = useLoan({ id: id as string });
+  const { loan, isEditing, setIsEditing } = useLoan();
 
   // TODO: Show a loading spinner
   if (!loan) {
