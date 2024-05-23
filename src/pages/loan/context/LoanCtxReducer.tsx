@@ -227,7 +227,7 @@ export function loanCtxReducer(
           }
 
           // Fallback to the payment at the right
-          indexOfClosestPayment = index + 1;
+          indexOfClosestPayment = index;
         }
 
         const currentPercentage =
