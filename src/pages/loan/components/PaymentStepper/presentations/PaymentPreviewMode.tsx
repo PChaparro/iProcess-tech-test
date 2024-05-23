@@ -1,7 +1,6 @@
 import { CONSTANTS } from '@/config/constants';
 import { Payment } from '@/types/entities';
 import { PencilIcon } from 'lucide-react';
-import { Fragment } from 'react/jsx-runtime';
 
 import AddPaymentButton from '../../AddPaymentButton';
 
@@ -42,7 +41,7 @@ export default function PaymentPreviewMode({
   );
 
   return (
-    <Fragment>
+    <div>
       {/* Separator */}
       <div className='absolute top-6 -z-50 w-full border transition-colors group-hover:border-primary'></div>
       {/* Button to add new payments */}
@@ -52,7 +51,7 @@ export default function PaymentPreviewMode({
       <AddPaymentButton newPaymentIndex={index + 1} variant='end' />
       {/* Payment information */}
       <article className='flex flex-col items-center gap-y-2'>
-        <button className='grid aspect-square w-12 place-content-center rounded-full border-2 border-neutral-200 bg-neutral-200  text-primary transition-colors group-hover:border-primary'>
+        <button className='grid aspect-square w-12 place-content-center rounded-full border-2 border-neutral-200 bg-neutral-200  text-primary transition-colors group-hover:border-primary group-hover:bg-white'>
           <PencilIcon
             size={20}
             className='opacity-0 transition-opacity group-hover:opacity-100'
@@ -65,6 +64,6 @@ export default function PaymentPreviewMode({
         </span>
         <span>{formattedPaymentDate}</span>
       </article>
-    </Fragment>
+    </div>
   );
 }
