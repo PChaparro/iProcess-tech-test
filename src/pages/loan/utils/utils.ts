@@ -32,7 +32,9 @@ export function formatPaymentInfo(
     },
   );
 
-  const estimatedPaymentDate = new Date(payment.expectedPaymentDate);
+  const estimatedPaymentDate = new Date(
+    payment.expectedPaymentDate.replace(/-/g, '/'),
+  );
   const formattedEstimatedPaymentDate = estimatedPaymentDate.toLocaleDateString(
     'es-ES',
     {
@@ -41,7 +43,7 @@ export function formatPaymentInfo(
   );
 
   const paymentDate = payment.paymentDate
-    ? new Date(payment.paymentDate)
+    ? new Date(payment.paymentDate.replace(/-/g, '/'))
     : null;
   const formattedPaymentDate = paymentDate?.toLocaleDateString('es-ES', {
     dateStyle: 'medium',

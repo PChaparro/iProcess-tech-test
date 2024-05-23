@@ -38,7 +38,7 @@ export default function PaymentPaidMode({
         <span className='font-bold'>
           {amount} <span className='font-normal'>({percentage} %)</span>
         </span>
-        <p className='text-balance text-emerald-500'>
+        <p className='max-w-44 text-center text-emerald-500'>
           Pagado el {paymentDate} con {payment.paymentMethod}
         </p>
       </article>
