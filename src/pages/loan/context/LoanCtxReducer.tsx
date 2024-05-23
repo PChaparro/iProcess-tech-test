@@ -304,11 +304,13 @@ export function loanCtxReducer(
 
         // Check that the previous payment is paid
         const previousPaymentIndex = indexOfPaymentToMarkAsPaid - 1;
+
         if (previousPaymentIndex >= 0) {
           const previousPayment = loan.payments[previousPaymentIndex];
 
           const previousPaymentIsNotPaid =
             previousPayment.status !== PaymentStatus.PAID;
+
           if (previousPaymentIsNotPaid) {
             throw new Error(
               'No se puede marcar un pago como pagado si el pago anterior no ha sido pagado',
@@ -323,6 +325,7 @@ export function loanCtxReducer(
               ...payment,
               status: PaymentStatus.PAID,
               paymentMethod: method,
+              paymentDate: formatDateToYYYYMMDD(new Date()),
             };
           }
 

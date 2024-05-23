@@ -7,7 +7,7 @@ import { LoanCtx } from '@/pages/loan/context/LoanCtx';
 
 export default function useLoan() {
   // Global state
-  const { loanState, loanDispatcher, isEditing, setIsEditing, saveChanges } =
+  const { loanState, loanDispatcher, isEditing, setIsEditing, syncChanges } =
     useContext(LoanCtx);
 
   const { loan } = loanState;
@@ -46,7 +46,7 @@ export default function useLoan() {
       payload: { paymentId, method },
     });
 
-    saveChanges();
+    syncChanges();
   };
 
   return {

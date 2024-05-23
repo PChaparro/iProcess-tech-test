@@ -27,7 +27,7 @@ interface LoadCtxType {
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
 
-  saveChanges: () => void;
+  syncChanges: () => void;
 }
 
 const defaultLoanState: LoanCtxState = {
@@ -43,7 +43,7 @@ const defaultLoanCtxValues: LoadCtxType = {
   isEditing: false,
   setIsEditing: () => {},
 
-  saveChanges: () => {},
+  syncChanges: () => {},
 };
 
 export const LoanCtx = createContext<LoadCtxType>(defaultLoanCtxValues);
@@ -54,27 +54,29 @@ export function LoanCtxProvider({ children }: { children: ReactNode }) {
   // Get all loans
   const { loans, updateLoan } = useLoans();
 
+  // Get the id of the loan from the url
+  const { id } = useParams();
+
   // Current loan state
   const [loanState, loanDispatcher] = useReducer(
     loanCtxReducer,
     defaultLoanState,
   );
+
   const [isEditing, setIsEditing] = useState(false);
 
-  const { id } = useParams();
+  const [updateCompleted, setUpdateCompleted] = useState(false);
 
   // Helpers
   const saveChanges = () => {
     if (loanState.loan) updateLoan(loanState.loan);
   };
 
+  const syncChanges = () => setUpdateCompleted(true);
+
   const setIsEditingAndSync = (isEditing: boolean) => {
     setIsEditing(isEditing);
-
-    if (!isEditing) {
-      saveChanges();
-      showSuccessToast('El préstamo ha sido actualizado');
-    }
+    if (!isEditing) syncChanges();
   };
 
   // Get the loan according to the id from the url
@@ -102,14 +104,25 @@ export function LoanCtxProvider({ children }: { children: ReactNode }) {
     }
   }, [loanState.confirmationMessage]);
 
+  // Sync the loan with the local storage after some change is written
+  useEffect(() => {
+    if (updateCompleted) {
+      saveChanges();
+      setUpdateCompleted(false);
+    }
+  }, [updateCompleted]);
+
   return (
     <LoanCtx.Provider
       value={{
+        // Loan reducer
         loanState,
         loanDispatcher,
+        // Editing state
         isEditing,
         setIsEditing: setIsEditingAndSync,
-        saveChanges,
+        // State to sync the changes
+        syncChanges,
       }}
     >
       {children}
