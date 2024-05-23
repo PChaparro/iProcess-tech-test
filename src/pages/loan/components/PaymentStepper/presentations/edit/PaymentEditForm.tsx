@@ -25,7 +25,7 @@ const paymentSchema = z.object({
     .number({ coerce: true })
     .min(0.01, 'El porcentaje del pago debe ser mayor a 0.01')
     .max(100, 'El porcentaje del pago no puede ser mayor a 100'),
-  paymentDate: z
+  expectedPaymentDate: z
     .string()
     .regex(
       /^\d{4}-\d{2}-\d{2}$/,
@@ -34,9 +34,11 @@ const paymentSchema = z.object({
     .refine(
       (value) => {
         const currentDate = new Date().setHours(0, 0, 0, 0);
-        const paymentDate = new Date(value.replace(/-/g, '/')).getTime();
+        const expectedPaymentDate = new Date(
+          value.replace(/-/g, '/'),
+        ).getTime();
 
-        return paymentDate >= currentDate;
+        return expectedPaymentDate >= currentDate;
       },
       { message: 'La fecha del pago debe ser mayor o igual a la fecha actual' },
     ),
@@ -56,7 +58,7 @@ export const PaymentEditForm = ({ payment }: PaymentEditFormProps) => {
       title: payment.title,
       amount: paymentAmount,
       percentage: payment.percentage,
-      paymentDate: payment.expectedPaymentDate,
+      expectedPaymentDate: payment.expectedPaymentDate,
     },
   });
 
@@ -75,13 +77,13 @@ export const PaymentEditForm = ({ payment }: PaymentEditFormProps) => {
 
     const paymentInfoHasChanged =
       values.title !== payment.title ||
-      values.paymentDate !== payment.expectedPaymentDate;
+      values.expectedPaymentDate !== payment.expectedPaymentDate;
 
     if (paymentInfoHasChanged) {
-      const updatedPayment = {
+      const updatedPayment: Payment = {
         ...payment,
         title: values.title,
-        paymentDate: values.paymentDate,
+        expectedPaymentDate: values.expectedPaymentDate,
       };
 
       updatePaymentInfo(updatedPayment);
@@ -187,7 +189,7 @@ export const PaymentEditForm = ({ payment }: PaymentEditFormProps) => {
         {/* Payment date */}
         <FormField
           control={form.control}
-          name='paymentDate'
+          name='expectedPaymentDate'
           render={({ field }) => (
             <FormItem className='mb-4'>
               <FormLabel className='text-neutral-400'>Vence</FormLabel>
@@ -199,9 +201,9 @@ export const PaymentEditForm = ({ payment }: PaymentEditFormProps) => {
                   {...field}
                 />
               </FormControl>
-              {form.formState.errors.paymentDate && (
+              {form.formState.errors.expectedPaymentDate && (
                 <FormMessage>
-                  {form.formState.errors.paymentDate.message}
+                  {form.formState.errors.expectedPaymentDate.message}
                 </FormMessage>
               )}
             </FormItem>

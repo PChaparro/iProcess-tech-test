@@ -1,7 +1,7 @@
 import { Payment } from '@/types/entities';
-import { PencilIcon } from 'lucide-react';
 
-import AddPaymentButton from '../../AddPaymentButton';
+import AddPaymentButton from '../../../AddPaymentButton';
+import MarkPaymentAsPaidDialog from '../../../MarkPaymentAsPaidDialog';
 
 import useLoan from '@/pages/loan/hooks/useLoan';
 import { formatPaymentInfo } from '@/pages/loan/utils/utils';
@@ -35,12 +35,7 @@ export default function PaymentPreviewMode({
       <AddPaymentButton newPaymentIndex={index + 1} variant='end' />
       {/* Payment information */}
       <article className='flex flex-col items-center gap-y-2'>
-        <button className='grid aspect-square w-12 place-content-center rounded-full border-2 border-neutral-200 bg-neutral-200  text-primary transition-colors group-hover:border-primary group-hover:bg-white'>
-          <PencilIcon
-            size={20}
-            className='opacity-0 transition-opacity group-hover:opacity-100'
-          />
-        </button>
+        <MarkPaymentAsPaidDialog paymentId={payment.id} />
         <h2 className='text-xl font-bold'>{payment.title}</h2>
         <span className='font-bold'>
           {amount} <span className='font-normal'>({percentage} %)</span>

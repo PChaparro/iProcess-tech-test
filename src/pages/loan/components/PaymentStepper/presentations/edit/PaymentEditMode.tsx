@@ -1,6 +1,6 @@
 import { Payment } from '@/types/entities';
 
-import AddPaymentButton from '../../AddPaymentButton';
+import AddPaymentButton from '../../../AddPaymentButton';
 import { PaymentEditForm } from './PaymentEditForm';
 
 interface PaymentEditModeProps {
