@@ -19,7 +19,7 @@ export default function AddPaymentButton({
     <div
       className={clsx(
         /* ignore the overflow of the parent */
-        'absolute z-10 opacity-0 transition-opacity hover:opacity-100 group-hover:opacity-100',
+        'absolute z-10 opacity-100 transition-opacity lg:opacity-0 lg:hover:opacity-100 lg:group-hover:opacity-100',
         {
           'left-full': variant === 'end',
           'right-full': variant === 'start',

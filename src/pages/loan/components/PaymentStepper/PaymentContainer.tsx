@@ -22,6 +22,8 @@ export default function PaymentContainer({
   );
 
   return (
-    <li className='group relative flex-[0_0_25%]'>{paymentPresentation}</li>
+    <li className='group relative min-w-64 flex-[0_0_25%]'>
+      {paymentPresentation}
+    </li>
   );
 }
