@@ -64,7 +64,7 @@ export const CreateLoanForm = ({
       title: 'Anticipo',
       percentage: 100,
       status: PaymentStatus.PENDING,
-      paymentDate: formatDateToYYYYMMDD(oneMothFromNow),
+      expectedPaymentDate: formatDateToYYYYMMDD(oneMothFromNow),
     };
 
     const now = new Date();

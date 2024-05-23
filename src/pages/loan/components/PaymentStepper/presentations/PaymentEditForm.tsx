@@ -56,7 +56,7 @@ export const PaymentEditForm = ({ payment }: PaymentEditFormProps) => {
       title: payment.title,
       amount: paymentAmount,
       percentage: payment.percentage,
-      paymentDate: payment.paymentDate,
+      paymentDate: payment.expectedPaymentDate,
     },
   });
 
@@ -75,7 +75,7 @@ export const PaymentEditForm = ({ payment }: PaymentEditFormProps) => {
 
     const paymentInfoHasChanged =
       values.title !== payment.title ||
-      values.paymentDate !== payment.paymentDate;
+      values.paymentDate !== payment.expectedPaymentDate;
 
     if (paymentInfoHasChanged) {
       const updatedPayment = {

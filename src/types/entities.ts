@@ -3,6 +3,11 @@ export enum PaymentStatus {
   PENDING = 'PENDING',
 }
 
+export enum PaymentMethod {
+  CASH = 'efectivo',
+  CARD = 'tarjeta',
+}
+
 /**
  * NOTE: Fields ending with `Date` are strings representing dates in the format 'YYYY-MM-DD'.
  */
@@ -12,7 +17,9 @@ export type Payment = {
   title: string;
   status: PaymentStatus;
   percentage: number; // Percentage of the total amount
-  paymentDate: string;
+  expectedPaymentDate: string;
+  paymentDate?: string;
+  paymentMethod?: PaymentMethod;
 };
 
 export type Loan = {
