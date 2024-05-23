@@ -29,11 +29,22 @@ export default function useLoan() {
     });
   };
 
+  const addNewPaymentAt = (index: number) => {
+    // TODO: In a real scenario, a request to an API should be made here to add a new payment.
+    loanDispatcher({
+      type: LoanCtxActionType.ADD_NEW_PAYMENT,
+      payload: { index },
+    });
+
+    setIsEditing(true);
+  };
+
   return {
     loan,
     isEditing,
     setIsEditing,
     updatePaymentPercentage,
     updatePaymentInfo,
+    addNewPaymentAt,
   };
 }

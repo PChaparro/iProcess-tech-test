@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { PlusIcon } from 'lucide-react';
 
+import useLoan from '../hooks/useLoan';
+
 interface AddPaymentButtonProps {
   newPaymentIndex: number;
   variant?: 'start' | 'end';
@@ -10,9 +12,8 @@ export default function AddPaymentButton({
   newPaymentIndex,
   variant = 'end',
 }: AddPaymentButtonProps) {
-  const handleAddPayment = () => {
-    console.log('Adding a new payment at index', newPaymentIndex);
-  };
+  const { addNewPaymentAt } = useLoan();
+  const handleAddPayment = () => addNewPaymentAt(newPaymentIndex);
 
   return (
     <div
