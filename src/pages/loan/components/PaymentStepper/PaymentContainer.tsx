@@ -15,13 +15,13 @@ export default function PaymentContainer({
 }: PaymentContainerProps) {
   const { isEditing } = useLoan();
 
+  const paymentPresentation = isEditing ? (
+    <PaymentEditMode index={index} payment={payment} />
+  ) : (
+    <PaymentPreviewMode index={index} payment={payment} />
+  );
+
   return (
-    <li className='group relative flex-[0_0_25%]'>
-      {isEditing ? (
-        <PaymentEditMode />
-      ) : (
-        <PaymentPreviewMode index={index} payment={payment} />
-      )}
-    </li>
+    <li className='group relative flex-[0_0_25%]'>{paymentPresentation}</li>
   );
 }
