@@ -155,23 +155,23 @@ export const PaymentEditForm = ({ payment }: PaymentEditFormProps) => {
                   <Button
                     size={'icon'}
                     variant={'secondary'}
-                    className='aspect-square rounded-full'
+                    className='rounded-full'
                     onClick={() => addToPercentage(-1)}
                   >
                     <MinusIcon />
                   </Button>
                   <Input
-                    className='border-none'
                     placeholder='Ingrese el porcentaje del pago'
                     aria-label='Porcentaje del pago'
                     type='number'
                     step={0.01}
+                    className='flex-1 border-none'
                     {...field}
                   />
                   <Button
                     size={'icon'}
                     variant={'secondary'}
-                    className='aspect-square rounded-full'
+                    className='rounded-full'
                     onClick={() => addToPercentage(1)}
                   >
                     <PlusIcon />
