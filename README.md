@@ -2,7 +2,7 @@
 
 My solution for the technical test for the Junior Frontend Developer position at iProcess.
 
-## Folder structure
+## 📂 Folder structure
 
 In the `src` folder you will find the following structure:
 
@@ -19,3 +19,26 @@ In the `src` folder you will find the following structure:
 - `pages`: The pages of the project. Each subfolder represents a page. Inside each subfolder you will find a `components`, `hooks` and `context` folders with the components, hooks and context providers used **only** in that page. This organization helps to keep high **cohesion** among all the elements that are part of a page to make it easier to maintain and understand.
 
 - `types`: Typescript types and interfaces used **globally** in the project.
+
+## 🚀 Running locally
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/PChaparro/iProcess-tech-test.git
+```
+
+2. Install the dependencies:
+
+```bash
+cd iProcess-tech-test
+pnpm i # or npm i
+```
+
+3. Run the development server:
+
+```bash
+pnpm dev # or npm run dev
+```
+
+4. Open [http://localhost:5174/](http://localhost:5174/) with your browser to see the result.
