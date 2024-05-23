@@ -1,56 +1,17 @@
-import {
-  formatDateToYYYYMMDD,
-  getRandomPaymentId,
-  isPaymentPercentageValid,
-} from '@/lib/utils';
-import { Loan, Payment, PaymentStatus } from '@/types/entities';
+import { formatDateToYYYYMMDD, getRandomPaymentId } from '@/lib/utils';
+import { Payment, PaymentStatus } from '@/types/entities';
 
+import { isPaymentPercentageValid } from '../utils/utils';
 import { LoanCtxState } from './LoanCtx';
-
-export enum LoanCtxActionType {
-  SET_LOAN, // Initialize the loan state
-  UPDATE_PAYMENT_PERCENTAGE,
-  UPDATE_PAYMENT_INFO,
-  ADD_NEW_PAYMENT,
-  RESET_ERROR,
-  RESET_CONFIRMATION_MESSAGE,
-}
-
-export type LoanCtxAction =
-  | {
-      type: LoanCtxActionType.SET_LOAN;
-      payload: Loan;
-    }
-  | {
-      type: LoanCtxActionType.UPDATE_PAYMENT_PERCENTAGE;
-      payload: {
-        paymentId: string;
-        percentage: number;
-      };
-    }
-  | {
-      type: LoanCtxActionType.UPDATE_PAYMENT_INFO;
-      payload: Payment;
-    }
-  | {
-      type: LoanCtxActionType.ADD_NEW_PAYMENT;
-      payload: {
-        index: number;
-      };
-    }
-  | {
-      type: LoanCtxActionType.RESET_ERROR;
-    }
-  | {
-      type: LoanCtxActionType.RESET_CONFIRMATION_MESSAGE;
-    };
+import { LoanCtxActionType, LoanReducerAction } from './LoanReducerActions';
 
 export function loanCtxReducer(
   state: LoanCtxState,
-  action: LoanCtxAction,
+  action: LoanReducerAction,
 ): LoanCtxState {
   try {
     switch (action.type) {
+      // #region SET_LOAN
       case LoanCtxActionType.SET_LOAN: {
         state = {
           ...state,
@@ -60,6 +21,7 @@ export function loanCtxReducer(
         return state;
       }
 
+      // #region UPDATE_PAYMENT_PERCENTAGE
       case LoanCtxActionType.UPDATE_PAYMENT_PERCENTAGE: {
         // Check that the loan state was set
         if (!state.loan) {
@@ -104,10 +66,18 @@ export function loanCtxReducer(
           );
         }
 
-        // Validate the new percentage of the affected payments
         const paymentToUpdate = loan.payments[indexOfPaymentToUpdate];
         const closestPayment = loan.payments[indexOfClosestPayment];
 
+        // Prevent the payments from being updated if they were already paid
+        if (
+          paymentToUpdate.status === PaymentStatus.PAID ||
+          closestPayment.status === PaymentStatus.PAID
+        ) {
+          throw new Error('No se puede actualizar un pago que ya fue pagado');
+        }
+
+        // Validate the new percentage of the affected payments
         const paymentPercentageDiff =
           newPercentageToSet - paymentToUpdate.percentage;
 
@@ -160,6 +130,7 @@ export function loanCtxReducer(
         return state;
       }
 
+      // #region UPDATE_PAYMENT_INFO
       case LoanCtxActionType.UPDATE_PAYMENT_INFO: {
         // Check that the loan state was set
         if (!state.loan) {
@@ -172,6 +143,13 @@ export function loanCtxReducer(
 
         const updatedPayments = loan.payments.map((payment) => {
           if (payment.id === updatedPayment.id) {
+            // Prevent the payment from being updated if it was already paid
+            if (payment.status === PaymentStatus.PAID) {
+              throw new Error(
+                'No se puede actualizar un pago que ya fue pagado',
+              );
+            }
+
             return updatedPayment;
           }
 
@@ -189,6 +167,7 @@ export function loanCtxReducer(
         return state;
       }
 
+      // #region ADD_NEW_PAYMENT
       case LoanCtxActionType.ADD_NEW_PAYMENT: {
         // Check that the loan state was set
         if (!state.loan) {
@@ -263,7 +242,7 @@ export function loanCtxReducer(
           id: getRandomPaymentId(),
           title: 'Nuevo',
           percentage: splittedPercentage,
-          paymentDate: formatDateToYYYYMMDD(oneMothFromNow),
+          expectedPaymentDate: formatDateToYYYYMMDD(oneMothFromNow),
           status: PaymentStatus.PENDING,
         };
 
@@ -292,6 +271,77 @@ export function loanCtxReducer(
         return state;
       }
 
+      // #region MARK_PAYMENT_AS_PAID
+      case LoanCtxActionType.MARK_PAYMENT_AS_PAID: {
+        // Check that the loan state was set
+        if (!state.loan) {
+          throw new Error('No se ha encontrado el préstamo');
+        }
+
+        const { paymentId, method } = action.payload;
+        const { loan } = state;
+
+        // Check that the payment to mark as paid exists
+        const indexOfPaymentToMarkAsPaid = loan.payments.findIndex(
+          (payment) => payment.id === paymentId,
+        );
+
+        const paymentNotFound = indexOfPaymentToMarkAsPaid === -1;
+        if (paymentNotFound) {
+          throw new Error(
+            'El pago que estás intentando marcar como pagado no fue encontrado',
+          );
+        }
+
+        // Check that the payment to mark as paid is pending
+        const paymentToMarkAsPaid = loan.payments[indexOfPaymentToMarkAsPaid];
+
+        const paymentIsAlreadyPaid =
+          paymentToMarkAsPaid.status === PaymentStatus.PAID;
+        if (paymentIsAlreadyPaid) {
+          throw new Error('El pago ya fue marcado como pagado');
+        }
+
+        // Check that the previous payment is paid
+        const previousPaymentIndex = indexOfPaymentToMarkAsPaid - 1;
+        if (previousPaymentIndex >= 0) {
+          const previousPayment = loan.payments[previousPaymentIndex];
+
+          const previousPaymentIsNotPaid =
+            previousPayment.status !== PaymentStatus.PAID;
+          if (previousPaymentIsNotPaid) {
+            throw new Error(
+              'No se puede marcar un pago como pagado si el pago anterior no ha sido pagado',
+            );
+          }
+        }
+
+        // Update the payment
+        const updatedPayments = loan.payments.map((payment, index) => {
+          if (index === indexOfPaymentToMarkAsPaid) {
+            return {
+              ...payment,
+              status: PaymentStatus.PAID,
+              paymentMethod: method,
+            };
+          }
+
+          return payment;
+        });
+
+        state = {
+          ...state,
+          loan: {
+            ...loan,
+            payments: updatedPayments,
+          },
+          confirmationMessage: 'El pago ha sido marcado como pagado',
+        };
+
+        return state;
+      }
+
+      // #region RESET_ERROR
       case LoanCtxActionType.RESET_ERROR: {
         state = {
           ...state,
@@ -301,6 +351,7 @@ export function loanCtxReducer(
         return state;
       }
 
+      // #region RESET_CONFIRMATION_MESSAGE
       case LoanCtxActionType.RESET_CONFIRMATION_MESSAGE: {
         state = {
           ...state,

@@ -8,11 +8,8 @@ import React, {
 } from 'react';
 import { useParams } from 'react-router-dom';
 
-import {
-  LoanCtxAction,
-  LoanCtxActionType,
-  loanCtxReducer,
-} from './LoanCtxReducer';
+import { loanCtxReducer } from './LoanCtxReducer';
+import { LoanCtxActionType, LoanReducerAction } from './LoanReducerActions';
 
 import useLoans from '@/hooks/useLoans';
 import useToast from '@/hooks/useToast';
@@ -25,10 +22,12 @@ export interface LoanCtxState {
 
 interface LoadCtxType {
   loanState: LoanCtxState;
-  loanDispatcher: React.Dispatch<LoanCtxAction>;
+  loanDispatcher: React.Dispatch<LoanReducerAction>;
 
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
+
+  saveChanges: () => void;
 }
 
 const defaultLoanState: LoanCtxState = {
@@ -43,6 +42,8 @@ const defaultLoanCtxValues: LoadCtxType = {
 
   isEditing: false,
   setIsEditing: () => {},
+
+  saveChanges: () => {},
 };
 
 export const LoanCtx = createContext<LoadCtxType>(defaultLoanCtxValues);
@@ -63,11 +64,15 @@ export function LoanCtxProvider({ children }: { children: ReactNode }) {
   const { id } = useParams();
 
   // Helpers
+  const saveChanges = () => {
+    if (loanState.loan) updateLoan(loanState.loan);
+  };
+
   const setIsEditingAndSync = (isEditing: boolean) => {
     setIsEditing(isEditing);
 
     if (!isEditing) {
-      updateLoan(loanState.loan!);
+      saveChanges();
       showSuccessToast('El préstamo ha sido actualizado');
     }
   };
@@ -104,6 +109,7 @@ export function LoanCtxProvider({ children }: { children: ReactNode }) {
         loanDispatcher,
         isEditing,
         setIsEditing: setIsEditingAndSync,
+        saveChanges,
       }}
     >
       {children}

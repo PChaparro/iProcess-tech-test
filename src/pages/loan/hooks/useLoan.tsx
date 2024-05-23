@@ -1,13 +1,13 @@
-import { Payment } from '@/types/entities';
+import { Payment, PaymentMethod } from '@/types/entities';
 import { useContext } from 'react';
 
-import { LoanCtxActionType } from '../context/LoanCtxReducer';
+import { LoanCtxActionType } from '../context/LoanReducerActions';
 
 import { LoanCtx } from '@/pages/loan/context/LoanCtx';
 
 export default function useLoan() {
   // Global state
-  const { loanState, loanDispatcher, isEditing, setIsEditing } =
+  const { loanState, loanDispatcher, isEditing, setIsEditing, saveChanges } =
     useContext(LoanCtx);
 
   const { loan } = loanState;
@@ -39,6 +39,16 @@ export default function useLoan() {
     setIsEditing(true);
   };
 
+  const markPaymentAsPaid = (paymentId: string, method: PaymentMethod) => {
+    // TODO: In a real scenario, a request to an API should be made here to mark the payment as paid.
+    loanDispatcher({
+      type: LoanCtxActionType.MARK_PAYMENT_AS_PAID,
+      payload: { paymentId, method },
+    });
+
+    saveChanges();
+  };
+
   return {
     loan,
     isEditing,
@@ -46,5 +56,6 @@ export default function useLoan() {
     updatePaymentPercentage,
     updatePaymentInfo,
     addNewPaymentAt,
+    markPaymentAsPaid,
   };
 }
