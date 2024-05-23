@@ -26,7 +26,10 @@ export default function PaymentEditMode({
       {/* Form to edit the payment details */}
       <div className='flex flex-col items-center gap-y-2'>
         <div className='aspect-square w-12 rounded-full border-2 border-primary bg-white'></div>
-        <PaymentEditForm payment={payment} />
+        <PaymentEditForm
+          payment={payment}
+          key={`${payment.id}_${payment.percentage}%`}
+        />
       </div>
     </div>
   );
