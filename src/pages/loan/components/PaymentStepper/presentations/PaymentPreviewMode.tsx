@@ -1,10 +1,10 @@
-import { CONSTANTS } from '@/config/constants';
 import { Payment } from '@/types/entities';
 import { PencilIcon } from 'lucide-react';
 
 import AddPaymentButton from '../../AddPaymentButton';
 
 import useLoan from '@/pages/loan/hooks/useLoan';
+import { formatPaymentInfo } from '@/pages/loan/utils/utils';
 
 interface PaymentPreviewModeProps {
   index: number;
@@ -17,28 +17,12 @@ export default function PaymentPreviewMode({
 }: PaymentPreviewModeProps) {
   const { loan } = useLoan();
 
-  const isFirstPayment = index === 0;
-
-  const paymentAmount = loan!.amount * (payment.percentage / 100);
-  const formattedPaymentAmount = new Intl.NumberFormat('es-ES', {
-    style: 'currency',
-    currency: CONSTANTS.CURRENCY,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
-  }).format(paymentAmount);
-
-  const paymentDate = new Date(payment.paymentDate);
-  const formattedPaymentDate = paymentDate.toLocaleDateString('es-ES', {
-    dateStyle: 'medium',
-  });
-
-  const formattedPaymentPercentage = payment.percentage.toLocaleString(
-    'es-ES',
-    {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2,
-    },
+  const { amount, percentage, estimatedPaymentDate } = formatPaymentInfo(
+    loan!,
+    payment,
   );
+
+  const isFirstPayment = index === 0;
 
   return (
     <div>
@@ -59,10 +43,9 @@ export default function PaymentPreviewMode({
         </button>
         <h2 className='text-xl font-bold'>{payment.title}</h2>
         <span className='font-bold'>
-          {formattedPaymentAmount}{' '}
-          <span className='font-normal'>({formattedPaymentPercentage} %)</span>
+          {amount} <span className='font-normal'>({percentage} %)</span>
         </span>
-        <span>{formattedPaymentDate}</span>
+        <span>{estimatedPaymentDate}</span>
       </article>
     </div>
   );
