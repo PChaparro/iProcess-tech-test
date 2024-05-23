@@ -22,3 +22,7 @@ export function getRandomPaymentId(): string {
 export function formatDateToYYYYMMDD(date: Date): string {
   return date.toISOString().split('T')[0];
 }
+
+export function isPaymentPercentageValid(percentage: number): boolean {
+  return percentage >= 0 && percentage <= 100;
+}

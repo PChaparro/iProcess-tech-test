@@ -23,8 +23,17 @@ export default function useLoans() {
     saveToLocalStorage('loans', JSON.stringify(updatedLoans));
   };
 
+  const updateLoan = (updatedLoan: Loan) => {
+    const updatedLoans = loans.map((loan) =>
+      loan.id === updatedLoan.id ? updatedLoan : loan,
+    );
+    setLoans(updatedLoans);
+    saveToLocalStorage('loans', JSON.stringify(updatedLoans));
+  };
+
   return {
     loans,
     addLoan,
+    updateLoan,
   };
 }

@@ -15,17 +15,30 @@ import {
 } from './LoanCtxReducer';
 
 import useLoans from '@/hooks/useLoans';
+import useToast from '@/hooks/useToast';
+
+export interface LoanCtxState {
+  loan: Loan | null;
+  errorMessage: string;
+  confirmationMessage?: string;
+}
 
 interface LoadCtxType {
-  loan: Loan | null;
+  loanState: LoanCtxState;
   loanDispatcher: React.Dispatch<LoanCtxAction>;
 
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
 }
 
-const defaultLoanCtxValues: LoadCtxType = {
+const defaultLoanState: LoanCtxState = {
   loan: null,
+  errorMessage: '',
+  confirmationMessage: '',
+};
+
+const defaultLoanCtxValues: LoadCtxType = {
+  loanState: defaultLoanState,
   loanDispatcher: () => null,
 
   isEditing: false,
@@ -35,16 +48,31 @@ const defaultLoanCtxValues: LoadCtxType = {
 export const LoanCtx = createContext<LoadCtxType>(defaultLoanCtxValues);
 
 export function LoanCtxProvider({ children }: { children: ReactNode }) {
+  const { showSuccessToast, showErrorToast } = useToast();
+
   // Get all loans
-  const { loans } = useLoans();
+  const { loans, updateLoan } = useLoans();
 
   // Current loan state
-  const [loan, loanDispatcher] = useReducer(loanCtxReducer, null);
+  const [loanState, loanDispatcher] = useReducer(
+    loanCtxReducer,
+    defaultLoanState,
+  );
   const [isEditing, setIsEditing] = useState(false);
 
-  // Get the loan according to the id from the url
   const { id } = useParams();
 
+  // Helpers
+  const setIsEditingAndSync = (isEditing: boolean) => {
+    setIsEditing(isEditing);
+
+    if (!isEditing) {
+      updateLoan(loanState.loan!);
+      showSuccessToast('El préstamo ha sido actualizado');
+    }
+  };
+
+  // Get the loan according to the id from the url
   useEffect(() => {
     const loan = loans.find((loan) => loan.id === id);
 
@@ -53,8 +81,31 @@ export function LoanCtxProvider({ children }: { children: ReactNode }) {
     }
   }, [id, loans]);
 
+  // Handle errors from the dispatcher
+  useEffect(() => {
+    if (loanState.errorMessage) {
+      showErrorToast(loanState.errorMessage);
+      loanDispatcher({ type: LoanCtxActionType.RESET_ERROR });
+    }
+  }, [loanState.errorMessage]);
+
+  // Handle success messages from the dispatcher
+  useEffect(() => {
+    if (loanState.confirmationMessage) {
+      showSuccessToast(loanState.confirmationMessage);
+      loanDispatcher({ type: LoanCtxActionType.RESET_CONFIRMATION_MESSAGE });
+    }
+  }, [loanState.confirmationMessage]);
+
   return (
-    <LoanCtx.Provider value={{ loan, loanDispatcher, isEditing, setIsEditing }}>
+    <LoanCtx.Provider
+      value={{
+        loanState,
+        loanDispatcher,
+        isEditing,
+        setIsEditing: setIsEditingAndSync,
+      }}
+    >
       {children}
     </LoanCtx.Provider>
   );
