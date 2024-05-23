@@ -1,4 +1,7 @@
-import { Loan, Payment, PaymentMethod } from '@/types/entities';
+import { Loan, Payment } from '@/types/entities';
+
+import { MarkAsPaidActionPayload } from './actions/mark-as-paid';
+import { UpdatePaymentPercentageActionPayload } from './actions/update-payment-percentage';
 
 export enum LoanCtxActionType {
   SET_LOAN, // Initialize the loan state
@@ -17,10 +20,7 @@ export type LoanReducerAction =
     }
   | {
       type: LoanCtxActionType.UPDATE_PAYMENT_PERCENTAGE;
-      payload: {
-        paymentId: string;
-        percentage: number;
-      };
+      payload: UpdatePaymentPercentageActionPayload;
     }
   | {
       type: LoanCtxActionType.UPDATE_PAYMENT_INFO;
@@ -34,10 +34,7 @@ export type LoanReducerAction =
     }
   | {
       type: LoanCtxActionType.MARK_PAYMENT_AS_PAID;
-      payload: {
-        paymentId: string;
-        method: PaymentMethod;
-      };
+      payload: MarkAsPaidActionPayload;
     }
   | {
       type: LoanCtxActionType.RESET_ERROR;

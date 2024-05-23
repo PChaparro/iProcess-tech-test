@@ -1,7 +1,7 @@
 import { Payment, PaymentMethod } from '@/types/entities';
 import { useContext } from 'react';
 
-import { LoanCtxActionType } from '../context/LoanReducerActions';
+import { LoanCtxActionType } from '../context/loan-reducer/LoanReducerActions';
 
 import { LoanCtx } from '@/pages/loan/context/LoanCtx';
 

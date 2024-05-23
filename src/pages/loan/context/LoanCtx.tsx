@@ -8,8 +8,11 @@ import React, {
 } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { loanCtxReducer } from './LoanCtxReducer';
-import { LoanCtxActionType, LoanReducerAction } from './LoanReducerActions';
+import { loanCtxReducer } from './loan-reducer/LoanCtxReducer';
+import {
+  LoanCtxActionType,
+  LoanReducerAction,
+} from './loan-reducer/LoanReducerActions';
 
 import useLoans from '@/hooks/useLoans';
 import useToast from '@/hooks/useToast';
